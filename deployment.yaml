@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pvc-sample
+  name: pvc-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pvc-sample
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: pvc-sample
+    spec:
+      containers:
+      - image: docker.io/ayasothar/pvc-sample:v01
+        name: pvc-sample
+        ports:
+        - containerPort: 8080
+          name: app-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /app/logs
+          name: pvc-sample-storage
+      volumes:
+      - name: pvc-sample-storage
+        persistentVolumeClaim:
+          claimName: pvc-sample-storage
